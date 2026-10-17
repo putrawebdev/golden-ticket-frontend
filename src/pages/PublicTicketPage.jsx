@@ -37,7 +37,9 @@ export default function PublicTicketPage({ ticketCode }) {
   useEffect(() => {
     const fetchPublicTicket = async () => {
       try {
-        const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/public/tickets/${ticketCode}`, {
+        // Ganti string fetch lama yang hardcode
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+        const res = await fetch(`${API_BASE_URL}/public/tickets/${ticketCode}`, {
           headers: { 'Accept': 'application/json' }
         })
         const json = await res.json()

@@ -18,7 +18,9 @@ export default function LoginScreen({ onLogin }) {
     setError('')
 
     try {
-      const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/login`, {
+      // Ganti string fetch lama yang hardcode
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+      const res = await fetch(`${API_BASE_URL}/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({ email, password })

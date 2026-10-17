@@ -54,7 +54,9 @@ export default function ScannerPage({ invitations, setInvitations, notify, token
     await stopScanner()
 
     try {
-      const response = await fetch(`https://golden-ticket-backend.wasmer.app/api/gatekeeper/validate`, {
+      // Ganti string fetch lama yang hardcode
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+      const response = await fetch(`${API_BASE_URL}/gatekeeper/validate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

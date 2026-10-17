@@ -19,7 +19,9 @@ export default function SettingsPage({ dark, setDark, notify, token, eventInfo, 
     setLoading(true)
 
     try {
-      const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/event-info`, {
+      // Ganti string fetch lama yang hardcode
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+      const res = await fetch(`${API_BASE_URL}/event-info`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

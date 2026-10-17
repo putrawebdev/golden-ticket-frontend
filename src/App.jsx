@@ -42,7 +42,9 @@ export default function App() {
   const handleLogout = async () => {
     try {
       if (token) {
-        await fetch(`https://golden-ticket-backend.wasmer.app/api/logout`, {
+        // Ganti string fetch lama yang hardcode
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+        await fetch(`${API_BASE_URL}/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -62,7 +64,9 @@ export default function App() {
   useEffect(() => {
     const fetchInvitations = async () => {
       try {
-        const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/invitations`, {
+        // Ganti string fetch lama yang hardcode
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+        const res = await fetch(`${API_BASE_URL}/invitations`, {
           headers: { 
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -96,10 +100,12 @@ export default function App() {
   
   const saveInvitation = async (item) => {
     try {
+      // Ganti string fetch lama yang hardcode
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
       const isEditing = !!editing;
       const url = isEditing 
-        ? `https://golden-ticket-backend.wasmer.app/api/invitations/${item.id}`
-        : `https://golden-ticket-backend.wasmer.app/api/invitations`;
+        ? `${API_BASE_URL}/invitations/${item.id}`
+        : `${API_BASE_URL}/invitations`;
       
       const res = await fetch(url, {
         method: isEditing ? 'PUT' : 'POST',
@@ -162,7 +168,9 @@ export default function App() {
   useEffect(() => {
     const fetchEventInfo = async () => {
       try {
-        const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/event-info`, {
+        // Ganti string fetch lama yang hardcode
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+        const res = await fetch(`${API_BASE_URL}/event-info`, {
           headers: { 
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
