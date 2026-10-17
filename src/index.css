@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  font-family: 'Poppins', sans-serif;
+  color: #f7f5f0;
+  background: #101820;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+::selection { background: #c6a15b; color: #101820; }
+.pattern {
+  background-image: radial-gradient(rgba(198,161,91,.12) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+/* Sebelum: object-fit: cover; */
+.qr-reader video { 
+  width: 100% !important; 
+  min-height: 300px; 
+  object-fit: contain !important; 
+}
+.qr-reader #qr-shaded-region { border-color: #c6a15b !important; }
+.qr-reader__scan_region { min-height: 270px; }
+.animate-in { animation: fade-in .3s ease-out both; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+.light-mode { background: #f3f1ec; color: #202a31; }
+.light-mode header { background: rgba(247,245,240,.92); border-color: rgba(16,24,32,.1); }
+.light-mode header .text-slate-100, .light-mode header .text-slate-200 { color: #202a31; }
+.light-mode main .text-slate-100, .light-mode main .text-slate-200 { color: #202a31; }
+.light-mode main .bg-\[\#17212A\] { background: #fff; }
+.light-mode main .bg-\[\#141F28\] { background: #fff; }
+.light-mode main .border-white\/\[\.07\], .light-mode main .border-white\/\[\.08\] { border-color: rgba(16,24,32,.12); }
+.light-mode main .text-slate-400 { color: #68747b; }
+.light-mode main .text-slate-500 { color: #7a858b; }
+.light-mode main .divide-white\/\[\.05\] > :not([hidden]) ~ :not([hidden]) { border-color: rgba(16,24,32,.08); }
+.light-mode footer { border-color: rgba(16,24,32,.1); color: #758087; }
+@media print {
+  aside, header, footer, button { display: none !important; }
+  main { padding: 0 !important; }
+  body, .app-shell { background: white !important; color: black !important; }
+}
