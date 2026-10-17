@@ -42,7 +42,7 @@ export default function App() {
   const handleLogout = async () => {
     try {
       if (token) {
-        await fetch(`${import.meta.env.VITE_API_BASE_URL}/logout`, {
+        await fetch(`https://golden-ticket-backend.wasmer.app/api/logout`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -62,7 +62,7 @@ export default function App() {
   useEffect(() => {
     const fetchInvitations = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/invitations`, {
+        const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/invitations`, {
           headers: { 
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -98,8 +98,8 @@ export default function App() {
     try {
       const isEditing = !!editing;
       const url = isEditing 
-        ? `${import.meta.env.VITE_API_BASE_URL}/invitations/${item.id}`
-        : `${import.meta.env.VITE_API_BASE_URL}/invitations`;
+        ? `https://golden-ticket-backend.wasmer.app/api/invitations/${item.id}`
+        : `https://golden-ticket-backend.wasmer.app/api/invitations`;
       
       const res = await fetch(url, {
         method: isEditing ? 'PUT' : 'POST',
@@ -162,7 +162,7 @@ export default function App() {
   useEffect(() => {
     const fetchEventInfo = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/event-info`, {
+        const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/event-info`, {
           headers: { 
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`

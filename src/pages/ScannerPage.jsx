@@ -54,7 +54,7 @@ export default function ScannerPage({ invitations, setInvitations, notify, token
     await stopScanner()
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gatekeeper/validate`, {
+      const response = await fetch(`https://golden-ticket-backend.wasmer.app/api/gatekeeper/validate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

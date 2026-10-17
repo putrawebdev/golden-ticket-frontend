@@ -37,7 +37,7 @@ export default function PublicTicketPage({ ticketCode }) {
   useEffect(() => {
     const fetchPublicTicket = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/public/tickets/${ticketCode}`, {
+        const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/public/tickets/${ticketCode}`, {
           headers: { 'Accept': 'application/json' }
         })
         const json = await res.json()

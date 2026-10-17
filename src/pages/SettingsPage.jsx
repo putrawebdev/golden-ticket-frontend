@@ -19,7 +19,7 @@ export default function SettingsPage({ dark, setDark, notify, token, eventInfo, 
     setLoading(true)
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/event-info`, {
+      const res = await fetch(`https://golden-ticket-backend.wasmer.app/api/event-info`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
