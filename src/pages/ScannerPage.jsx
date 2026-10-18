@@ -113,13 +113,17 @@ export default function ScannerPage({ invitations, setInvitations, notify, token
       await scannerRef.current.start(
         { facingMode: 'environment' },
         {
-          fps: 15,
+          fps: 5, // Ubah dari 15 menjadi 5 agar tidak terlalu agresif/sensitif
           qrbox: { width: 220, height: 220 }
         },
         decodedText => {
           if (!isRunningRef.current || processingRef.current) return
           isRunningRef.current = false
-          validate(decodedText)
+          
+          // Berikan jeda pendek (150ms) sebelum eksekusi validasi agar posisi fokus pas
+          setTimeout(() => {
+            validate(decodedText)
+          }, 150)
         },
         errorMessage => {}
       )
