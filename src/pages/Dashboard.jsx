@@ -29,7 +29,7 @@ import { categoryLabel, getInvitee } from '../data'
 // Formatter angka
 const moneyless = (n) => new Intl.NumberFormat('id-ID').format(n || 0)
 
-export default function Dashboard({ invitations, setPage, onCreate, onPreview, eventInfo }) {
+export default function Dashboard({ invitations, setPage, onCreate, onPreview, eventInfo, token }) {
   const total = invitations.length
   const used = invitations.reduce((s, i) => s + i.scan_count, 0)
   const capacity = invitations.reduce((s, i) => s + i.max_scans, 0)

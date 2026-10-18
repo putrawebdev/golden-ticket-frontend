@@ -204,7 +204,7 @@ export default function App() {
         />
 
         <main className="mx-auto max-w-[1600px] px-4 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-9">
-          {page==='dashboard' && <Dashboard invitations={invitations} setPage={setPage} onCreate={openCreate} onPreview={setPreview} eventInfo={eventInfo} />}
+          {page==='dashboard' && <Dashboard invitations={invitations} setPage={setPage} onCreate={openCreate} onPreview={setPreview} eventInfo={eventInfo} token={token} />}
           {page==='invitations' && <InvitationsPage invitations={invitations} setInvitations={setInvitations} query={query} setQuery={setQuery} onCreate={openCreate} onEdit={openEdit} onPreview={setPreview} notify={notify}/>}
           {page==='scanner' && <ScannerPage invitations={invitations} setInvitations={setInvitations} notify={notify} token={token} />}
           {page==='attendance' && <AttendancePage invitations={invitations}/>}
