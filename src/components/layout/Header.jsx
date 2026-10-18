@@ -1,4 +1,4 @@
-import { Menu, Search, Bell, Plus } from 'lucide-react'
+import { Menu, Search, Bell, Plus, User } from 'lucide-react'
 import Button from '../ui/Button'
 
 // Format tanggal lokal
@@ -25,7 +25,7 @@ export default function Header({ page, setMobileOpen, query, setQuery, onCreate 
         </button>
         <div className="min-w-0">
           <div className="text-[9px] tracking-[.15em] text-slate-500">
-            GEN Z INDONESIA / <span className="text-[#C6A15B]">{page.toUpperCase()}</span>
+            GOLDEN TICKET / <span className="text-[#C6A15B]">{page.toUpperCase()}</span>
           </div>
           <div className="mt-1 truncate text-sm font-semibold text-slate-100">
             {titles[page] || 'Pengaturan'}
@@ -51,15 +51,12 @@ export default function Header({ page, setMobileOpen, query, setQuery, onCreate 
         </button>
         <div className="hidden h-8 w-px bg-white/10 sm:block"/>
         <div className="hidden text-right sm:block">
-          <div className="text-[10px] font-semibold text-slate-200">Event Admin</div>
+          <div className="text-[10px] font-semibold text-slate-200">Event Administrator</div>
           <div className="mt-0.5 text-[9px] text-slate-500">{shortDate}</div>
         </div>
-        <div className="grid h-9 w-9 place-items-center rounded-xl border border-[#C6A15B]/20 bg-[#C6A15B]/10 text-[10px] font-bold text-[#D9B96E]">EA</div>
-        {page === 'dashboard' && (
-          <Button className="hidden sm:inline-flex" onClick={onCreate}>
-            <Plus size={14}/>Buat tiket
-          </Button>
-        )}
+        <div className="grid h-9 w-9 place-items-center rounded-xl border border-[#C6A15B]/20 bg-[#C6A15B]/10 text-[10px] font-bold text-[#D9B96E]">
+          <User />
+        </div>
       </div>
     </header>
   )

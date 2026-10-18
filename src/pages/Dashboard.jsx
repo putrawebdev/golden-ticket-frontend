@@ -85,14 +85,11 @@ export default function Dashboard({ invitations, setPage, onCreate, onPreview, e
             Platinum Cineplex Milenial Hub Metland Cibitung
           </div>
         </div>
-        <Badge tone="green">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-300"/> UI Preview
-        </Badge>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard title="Total Tiket" value={moneyless(total)} note="Tiket undangan terdaftar" trend="+12.5%" icon={Ticket}/>
-        <MetricCard title="Kehadiran Tercatat" value={moneyless(used)} note="Total pemindaian berhasil" trend="+8.2%" icon={UsersRound} tone="green"/>
+        <MetricCard title="Total Tiket" value={moneyless(total)} note="Tiket undangan terdaftar" icon={Ticket}/>
+        <MetricCard title="Kehadiran Tercatat" value={moneyless(used)} note="Total pemindaian berhasil" icon={UsersRound} tone="green"/>
         <MetricCard title="Sisa Kuota" value={moneyless(Math.max(0, capacity-used))} note={`Dari ${moneyless(capacity)} kuota teralokasi`} icon={TicketCheck} tone="blue"/>
         <MetricCard title="Tiket Penuh" value={moneyless(full)} note="Tidak menerima akses tambahan" icon={ShieldCheck}/>
       </div>

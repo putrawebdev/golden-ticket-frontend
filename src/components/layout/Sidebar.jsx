@@ -8,7 +8,8 @@ import {
   Moon, 
   Settings, 
   ChevronRight, 
-  LogOut 
+  LogOut ,
+  User
 } from 'lucide-react'
 import Brand from '../ui/Brand'
 
@@ -92,10 +93,12 @@ export default function Sidebar({ page, setPage, mobileOpen, setMobileOpen, dark
 
         <div className="border-t border-white/[.06] p-4">
           <div className="flex items-center gap-3 rounded-xl bg-white/[.03] p-3">
-            <div className="grid h-9 w-9 place-items-center rounded-xl bg-[#C6A15B]/15 text-xs font-bold text-[#D9B96E]">AD</div>
+            <div className="grid h-9 w-9 place-items-center rounded-xl bg-[#C6A15B]/15 text-xs font-bold text-[#D9B96E]">
+              <User />
+            </div>
             <div className="min-w-0 flex-1">
               <div className="truncate text-[11px] font-semibold text-slate-200">Event Administrator</div>
-              <div className="mt-0.5 text-[9px] text-slate-500">Admin account · Demo</div>
+              <div className="mt-0.5 text-[9px] text-slate-500">Admin account</div>
             </div>
             <button
               title="Logout"

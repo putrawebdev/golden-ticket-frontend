@@ -120,17 +120,6 @@ export default function SettingsPage({ dark, setDark, notify, token, eventInfo, 
             </div>
           </form>
         </section>
-
-        <section className="rounded-2xl border border-white/[.07] bg-[#17212A] p-5">
-          <h2 className="text-sm font-semibold text-slate-100">Integrasi backend</h2>
-          <div className="mt-3 flex gap-3 rounded-xl border border-amber-400/15 bg-amber-400/[.05] p-3">
-            <WifiOff size={16} className="mt-0.5 shrink-0 text-amber-300"/>
-            <div>
-              <div className="text-[11px] font-medium text-amber-100">Terhubung ke API Laravel</div>
-              <p className="mt-1 text-[10px] leading-5 text-slate-400">Pengaturan tersimpan langsung pada server backend.</p>
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   )

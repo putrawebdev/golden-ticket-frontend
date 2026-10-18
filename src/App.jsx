@@ -219,8 +219,8 @@ export default function App() {
         </main>
 
         <footer className="mx-auto flex max-w-[1600px] flex-col justify-between gap-2 border-t border-white/[.05] px-4 py-5 text-[9px] text-slate-600 sm:flex-row sm:px-7 lg:px-9">
-          <span>© 2026 Golden Ticket · Gen Z Indonesia</span>
-          <span>Sistem Terhubung ke Produksi API Laravel</span>
+          <span>© 2026 Golden Ticket · SMK Metland Cibitung</span>
+          <span>Dibuat oleh @putrawebdev</span>
         </footer>
       </div>
 

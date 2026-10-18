@@ -75,10 +75,6 @@ export default function AttendancePage({ invitations }) {
           </table>
         </div>
       </div>
-
-      <div className="mt-4 rounded-xl border border-amber-400/15 bg-amber-400/[.04] p-4 text-[10px] leading-5 text-amber-100/70">
-        <AlertTriangle size={14} className="mr-2 inline text-amber-300"/> Laporan ini memakai data demo. Riwayat scan dengan waktu, petugas, dan hasil perlu disediakan backend melalui endpoint log khusus.
-      </div>
     </div>
   )
 }

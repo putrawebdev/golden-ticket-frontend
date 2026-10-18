@@ -205,11 +205,6 @@ export default function ScannerPage({ invitations, setInvitations, notify, token
                 <Button type="submit" disabled={!manualCode.trim()}>Validasi</Button>
               </form>
             )}
-
-            <div className="mt-4 flex items-start gap-2 rounded-xl bg-white/[.025] p-3">
-              <ShieldCheck size={14} className="mt-0.5 shrink-0 text-[#C6A15B]"/>
-              <p className="text-[10px] leading-5 text-slate-500">Validasi langsung dikirim ke API Laravel untuk memverifikasi hak akses tamu.</p>
-            </div>
           </div>
         </section>
 
