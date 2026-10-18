@@ -15,6 +15,7 @@ import {
   Plus, 
   Activity 
 } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 // Import Komponen UI
 import Button from '../components/ui/Button'
