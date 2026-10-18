@@ -26,7 +26,7 @@ export default function AttendancePage({ invitations }) {
       />
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <MetricCard title="Kehadiran tercatat" value={used} note="Jumlah scan sukses (data demo)" icon={Users} tone="green"/>
+        <MetricCard title="Kehadiran tercatat" value={used} note="Jumlah scan sukses" icon={Users} tone="green"/>
         <MetricCard title="Total alokasi kuota" value={cap} note="Gabungan kuota tiket" icon={Ticket}/>
         <MetricCard title="Persentase penggunaan" value={`${cap ? Math.round(used / cap * 100) : 0}%`} note="Kehadiran dibanding total kuota" icon={ChartNoAxesCombined} tone="blue"/>
       </div>

@@ -26,12 +26,10 @@ export default function TicketPreview({ item, onClose }) {
         <div className="my-5 flex flex-col items-center rounded-2xl bg-white p-4">
           <QRArt value={item.ticket_code} size={174}/>
           <div className="mt-3 text-[10px] font-semibold tracking-[.14em] text-[#101820]">{item.ticket_code}</div>
-          <div className="mt-1 text-[9px] text-slate-500">DEMO QR PREVIEW · SERVER QR NEEDED</div>
         </div>
         <div className="flex items-center justify-between border-t border-dashed border-white/15 pt-4"><div><div className="text-[9px] text-slate-500">SISA KUOTA</div><div className="mt-1 text-sm font-semibold text-white">{Math.max(0, item.max_scans - item.scan_count)} <span className="text-[10px] font-normal text-slate-500">dari {item.max_scans} orang</span></div></div><ShieldCheck className="text-[#C6A15B]" size={22}/></div>
       </div>
     </div>
-    <div className="mt-4 rounded-xl border border-amber-400/15 bg-amber-400/[.06] p-3 text-[10px] leading-5 text-amber-200/80"><AlertTriangle size={13} className="mr-1 inline"/> QR di pratinjau ini hanya visual demo, bukan kode yang dapat divalidasi. Integrasikan generator QR dan endpoint Laravel sebelum digunakan pada acara.</div>
     <div className="mt-4 flex justify-end"><Button variant="secondary" onClick={onClose}>Tutup pratinjau</Button></div>
   </Modal>
 }

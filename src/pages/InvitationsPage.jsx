@@ -42,7 +42,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
   const copy = async item => { 
     try { 
       await navigator.clipboard.writeText(`${window.location.origin}/ticket/${item.ticket_code}`)
-      notify('Tautan tiket disalin (demo URL).') 
+      notify('Tautan tiket disalin.') 
     } catch { 
       notify('Browser tidak mengizinkan salin otomatis.') 
     } 
@@ -153,9 +153,9 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
                           <button 
                             title="Hapus demo" 
                             onClick={() => {
-                              if (window.confirm('Hapus tiket ini dari data demo?')) {
+                              if (window.confirm('Hapus tiket ini dari data?')) {
                                 setInvitations(prev => prev.filter(i => i.id !== item.id))
-                                notify('Tiket dihapus dari data demo.')
+                                notify('Tiket dihapus dari data.')
                               }
                             }} 
                             className="rounded-lg p-2 text-slate-600 hover:bg-rose-400/10 hover:text-rose-300"

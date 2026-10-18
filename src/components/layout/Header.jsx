@@ -45,10 +45,6 @@ export default function Header({ page, setMobileOpen, query, setQuery, onCreate 
             />
           </div>
         )}
-        <button title="Notifikasi demo" className="relative grid h-9 w-9 place-items-center rounded-xl border border-white/[.08] text-slate-400 hover:bg-white/[.05]">
-          <Bell size={16}/>
-          <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-[#C6A15B]"/>
-        </button>
         <div className="hidden h-8 w-px bg-white/10 sm:block"/>
         <div className="hidden text-right sm:block">
           <div className="text-[10px] font-semibold text-slate-200">Event Administrator</div>
