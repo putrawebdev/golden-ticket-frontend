@@ -55,6 +55,28 @@ export default function Dashboard({ invitations, setPage, onCreate, onPreview, e
     })
   }
 
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      const activeToken = token || localStorage.getItem('token');
+      if (!activeToken) return;
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/admin/profile`, {
+          headers: {
+            'Authorization': `Bearer ${activeToken}`,
+            'Accept': 'application/json'
+          }
+        });
+        const data = await res.json();
+        // set state data dashboard...
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchDashboardData();
+  }, [token]); // Re-run fetching saat token berubah
+
   return (
     <div className="animate-in">
       <SectionTitle 

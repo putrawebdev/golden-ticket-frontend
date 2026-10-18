@@ -28,9 +28,13 @@ export default function LoginScreen({ onLogin }) {
       const data = await res.json()
 
       if (res.ok && data.success) {
-        onLogin(data.access_token)
+        // Simpan token dulu ke localStorage
+        localStorage.setItem('token', data.access_token);
+        
+        // Panggil fungsi onLogin dari App.jsx
+        onLogin(data.access_token);
       } else {
-        setError(data.message || 'Login gagal.')
+        setError(data.message || 'Login gagal. Cek email/password.');
       }
     } catch (err) {
       setError('Gagal terhubung ke server.')

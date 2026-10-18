@@ -26,7 +26,7 @@ export default function App() {
     return <PublicTicketPage ticketCode={ticketCode} />
   }
 
-  // 1. State Token & Aplikasi
+  // 1. KUMPULAN SEMUA STATE (Wajib di Paling Atas)
   const [token, setToken] = useState(localStorage.getItem('admin_token') || '')
   const [page, setPage] = useState('dashboard')
   const [invitations, setInvitations] = useState([])
@@ -37,12 +37,18 @@ export default function App() {
   const [editing, setEditing] = useState(null)
   const [preview, setPreview] = useState(null)
   const [toast, setToast] = useState('')
+  
+  const [eventInfo, setEventInfo] = useState({
+    title: 'Gen Z Indonesia 2026',
+    theme: 'The Nusantara Legends Go to the World',
+    location: 'Platinum Cineplex Milenial Hub Metland Cibitung',
+    event_date: '',
+  })
 
-  // 2. Handler Logout
+  // 2. HANDLER FUNCTIONS
   const handleLogout = async () => {
     try {
       if (token) {
-        // Ganti string fetch lama yang hardcode
         const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
         await fetch(`${API_BASE_URL}/logout`, {
           method: 'POST',
@@ -60,11 +66,10 @@ export default function App() {
     }
   }
 
-  // 3. Effects
+  // 3. KUMPULAN SEMUA EFFECTS (Wajib Sebelum Early Return)
   useEffect(() => {
     const fetchInvitations = async () => {
       try {
-        // Ganti string fetch lama yang hardcode
         const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
         const res = await fetch(`${API_BASE_URL}/invitations`, {
           headers: { 
@@ -83,6 +88,26 @@ export default function App() {
     if (token) fetchInvitations()
   }, [token])
 
+  useEffect(() => {
+    const fetchEventInfo = async () => {
+      try {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
+        const res = await fetch(`${API_BASE_URL}/event-info`, {
+          headers: { 
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        const json = await res.json();
+        if (json.success && json.data) setEventInfo(json.data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    if (token) fetchEventInfo();
+  }, [token]);
+
   useEffect(() => { 
     document.documentElement.classList.toggle('light-preview', !dark) 
   }, [dark])
@@ -93,14 +118,13 @@ export default function App() {
     return () => clearTimeout(timer) 
   }, [toast])
 
-  // 4. Helper Functions
+  // 4. HELPER FUNCTIONS
   const notify = message => setToast(message)
   const openCreate = () => { setEditing(null); setFormOpen(true) }
   const openEdit = item => { setEditing(item); setFormOpen(true) }
   
   const saveInvitation = async (item) => {
     try {
-      // Ganti string fetch lama yang hardcode
       const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
       const isEditing = !!editing;
       const url = isEditing 
@@ -122,7 +146,7 @@ export default function App() {
           parent_1_name: item.parent_1_name,
           parent_2_name: item.parent_2_name,
           seat_area: item.seat_area,
-          event_date: item.event_date || null // <--- PENTING: Pastikan ini ikut dikirim ke Laravel!
+          event_date: item.event_date || null
         })
       });
 
@@ -145,46 +169,19 @@ export default function App() {
     }
   };
 
-  // 5. Early Return untuk Auth Gate
+  // 5. EARLY RETURN (Auth Gate ditaruh setelah seluruh Hooks didaftarkan)
   if (!token) {
     return (
       <LoginScreen 
         onLogin={(newToken) => {
-          setToken(newToken)
           localStorage.setItem('admin_token', newToken)
+          setToken(newToken)
         }}
       />
     )
   }
-// 1. Tambahkan state eventInfo utama di sini
-  const [eventInfo, setEventInfo] = useState({
-    title: 'Gen Z Indonesia 2026',
-    theme: 'The Nusantara Legends Go to the World',
-    location: 'Platinum Cineplex Milenial Hub Metland Cibitung',
-    event_date: '',
-  });
 
-  // 2. Fetch event-info dari API saat pertama kali aplikasi dibuka
-  useEffect(() => {
-    const fetchEventInfo = async () => {
-      try {
-        // Ganti string fetch lama yang hardcode
-        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api';
-        const res = await fetch(`${API_BASE_URL}/event-info`, {
-          headers: { 
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        const json = await res.json();
-        if (json.success && json.data) setEventInfo(json.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchEventInfo();
-  }, [token]);
-  // 6. Render Utama
+  // 6. RENDER UTAMA APLIKASI
   return (
     <div className={`app-shell min-h-screen ${dark ? '' : 'light-mode'}`}>
       <Sidebar 
@@ -207,14 +204,10 @@ export default function App() {
         />
 
         <main className="mx-auto max-w-[1600px] px-4 py-6 sm:px-7 sm:py-8 lg:px-9 lg:py-9">
-          {/* Oper eventInfo ke Dashboard */}
           {page==='dashboard' && <Dashboard invitations={invitations} setPage={setPage} onCreate={openCreate} onPreview={setPreview} eventInfo={eventInfo} />}
-          
           {page==='invitations' && <InvitationsPage invitations={invitations} setInvitations={setInvitations} query={query} setQuery={setQuery} onCreate={openCreate} onEdit={openEdit} onPreview={setPreview} notify={notify}/>}
           {page==='scanner' && <ScannerPage invitations={invitations} setInvitations={setInvitations} notify={notify} token={token} />}
           {page==='attendance' && <AttendancePage invitations={invitations}/>}
-          
-          {/* Oper eventInfo & setEventInfo ke SettingsPage */}
           {page==='settings' && <SettingsPage dark={dark} setDark={setDark} notify={notify} token={token} eventInfo={eventInfo} setEventInfo={setEventInfo} />}
         </main>
 
