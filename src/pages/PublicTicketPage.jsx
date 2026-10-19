@@ -149,9 +149,15 @@ export default function PublicTicketPage({ ticketCode }) {
           {/* Sisa Kuota Scan */}
           <div className="flex items-center justify-between border-t border-dashed border-white/15 pt-4">
             <div>
-              <div className="text-[9px] text-slate-500">SISA KUOTA ENTRY</div>
-              <div className="mt-1 text-sm font-semibold text-white">
-                {ticket.remaining_scans} <span className="text-[10px] font-normal text-slate-500">dari {ticket.max_scans} orang</span>
+              {/* Ubah dari teks lama ke format yang lebih jelas ini */}
+              <div className="text-[10px] uppercase tracking-wider text-slate-500">
+                KUOTA MASUK
+              </div>
+              <div className="mt-1 text-xs font-bold text-[#D9B96E]">
+                {data.remaining_scans} / {data.max_scans} Orang Sisa Kuota
+              </div>
+              <div className="text-[9px] text-slate-500">
+                (Belum di-scan sama sekali)
               </div>
             </div>
             <ShieldCheck className="text-[#C6A15B]" size={24}/>
