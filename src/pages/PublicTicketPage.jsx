@@ -145,13 +145,20 @@ export default function PublicTicketPage({ ticketCode }) {
               Tunjukkan QR Code ini kepada petugas di pintu masuk acara.
             </p>
 
-            {/* Kuota Information */}
-            <div className="mt-6 rounded-2xl border border-white/5 bg-[#17212A] p-3.5">
-              <div className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
-                Sisa Kuota Entry
+            {/* Kuota Information - Tampilan Eksplisit */}
+            <div className="mt-6 rounded-2xl border border-white/5 bg-[#17212A] p-4 text-left space-y-2.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-slate-400">Jumlah Di-scan:</span>
+                <span className={`font-bold ${ticket.scan_count > 0 ? 'text-[#C6A15B]' : 'text-emerald-400'}`}>
+                  {ticket.scan_count === 0 ? 'Belum pernah di-scan' : `${ticket.scan_count}x terpakai`}
+                </span>
               </div>
-              <div className="mt-0.5 text-xs font-bold text-[#D9B96E]">
-                {ticket.remaining_scans ?? (ticket.max_scans - ticket.scan_count)} dari {ticket.max_scans} Orang
+
+              <div className="flex items-center justify-between text-xs border-t border-white/5 pt-2.5">
+                <span className="text-slate-400">Sisa Kuota Masuk:</span>
+                <span className="font-bold text-[#D9B96E]">
+                  {ticket.remaining_scans ?? (ticket.max_scans - ticket.scan_count)} Orang
+                </span>
               </div>
             </div>
           </div>
