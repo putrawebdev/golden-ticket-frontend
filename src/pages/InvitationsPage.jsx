@@ -39,7 +39,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
 
   useEffect(() => setPage(1), [filter, status, query])
 
-  // 1. Disesuaikan agar menyalin tautan /public/KODE_TIKET (Halaman Home/Landing)
+  // Salin tautan publik (/public/KODE_TIKET)
   const copy = async item => { 
     try { 
       const publicUrl = `${window.location.origin}/public/${item.ticket_code}`
@@ -50,7 +50,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
     } 
   }
 
-  // 2. Fungsi Hapus yang tersambung langsung ke API Backend PostgreSQL
+  // Hapus tiket langsung dari database PostgreSQL
   const handleDelete = async (id) => {
     if (!window.confirm('Hapus tiket ini secara permanen dari database?')) return
 
@@ -86,18 +86,31 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
         action={<Button onClick={onCreate}><Plus size={14}/>Buat undangan</Button>}
       />
 
-      <div className="mb-5 grid gap-3 sm:grid-cols-3">
+      {/* Ringkasan Statistik & Estimasi Konsumsi */}
+      <div className="mb-5 grid gap-3 sm:grid-cols-4">
         <div className="rounded-xl border border-white/[.07] bg-[#17212A] p-4">
-          <div className="text-[10px] text-slate-500">Semua tiket</div>
+          <div className="text-[10px] text-slate-500">Total Undangan</div>
           <div className="mt-1 text-xl font-semibold text-white">{invitations.length}</div>
         </div>
         <div className="rounded-xl border border-white/[.07] bg-[#17212A] p-4">
-          <div className="text-[10px] text-slate-500">Tiket aktif</div>
-          <div className="mt-1 text-xl font-semibold text-emerald-300">{invitations.filter(i => i.scan_count < i.max_scans).length}</div>
+          <div className="text-[10px] text-slate-500">Konfirmasi Hadir</div>
+          <div className="mt-1 text-xl font-semibold text-emerald-300">
+            {invitations.filter(i => i.rsvp_status === 'attending').length}
+          </div>
         </div>
         <div className="rounded-xl border border-white/[.07] bg-[#17212A] p-4">
-          <div className="text-[10px] text-slate-500">Kuota penuh</div>
-          <div className="mt-1 text-xl font-semibold text-rose-300">{invitations.filter(i => i.scan_count >= i.max_scans).length}</div>
+          <div className="text-[10px] text-slate-500">Tidak Hadir (Coret)</div>
+          <div className="mt-1 text-xl font-semibold text-rose-400">
+            {invitations.filter(i => i.rsvp_status === 'declined').length}
+          </div>
+        </div>
+        <div className="rounded-xl border border-amber-500/20 bg-[#17212A] p-4">
+          <div className="text-[10px] font-medium text-[#C6A15B]">ESTIMASI KONSUMSI</div>
+          <div className="mt-1 text-xl font-bold text-[#D9B96E]">
+            {invitations
+              .filter(i => i.rsvp_status === 'attending')
+              .reduce((sum, i) => sum + (i.max_scans || 1), 0)} Pax
+          </div>
         </div>
       </div>
 
@@ -141,6 +154,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
                   <tr className="border-b border-white/[.06] text-[9px] font-semibold tracking-[.08em] text-slate-500">
                     <th className="px-5 py-3.5">PENERIMA</th>
                     <th className="px-4 py-3.5">KATEGORI</th>
+                    <th className="px-4 py-3.5">RSVP</th>
                     <th className="px-4 py-3.5">KODE TIKET</th>
                     <th className="px-4 py-3.5">TEMPAT DUDUK</th>
                     <th className="px-4 py-3.5">KUOTA</th>
@@ -149,47 +163,78 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/[.045]">
-                  {rows.map(item => (
-                    <tr key={item.id} className="transition hover:bg-white/[.018]">
-                      <td className="px-5 py-4">
-                        <div className="max-w-[180px] truncate text-[11px] font-medium text-slate-200">{getInvitee(item)}</div>
-                        <div className="mt-1 text-[9px] text-slate-500">
-                          {item.type === 'school' ? `${item.teacher_names?.length || 0} guru pendamping` : item.type === 'vip' ? 'Undangan individual' : 'Undangan keluarga'}
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <Badge tone={item.type === 'vip' ? 'gold' : 'neutral'}>{categoryLabel[item.type]}</Badge>
-                      </td>
-                      <td className="px-4 py-4 font-mono text-[10px] text-slate-400">{item.ticket_code}</td>
-                      <td className="px-4 py-4 text-[10px] text-slate-300">{item.seat_area}</td>
-                      <td className="px-4 py-4">
-                        <div className="text-[10px] font-medium text-slate-200">{item.scan_count}<span className="text-slate-500">/{item.max_scans}</span></div>
-                        <div className="mt-1.5 h-1 w-16 overflow-hidden rounded-full bg-white/10">
-                          <div className={`h-full rounded-full ${item.scan_count >= item.max_scans ? 'bg-rose-400' : 'bg-[#C6A15B]'}`} style={{ width: `${Math.min(100, (item.scan_count / item.max_scans) * 100)}%` }}/>
-                        </div>
-                      </td>
-                      <td className="px-4 py-4">
-                        <Badge tone={item.scan_count >= item.max_scans ? 'red' : 'green'}>
-                          <span className={`h-1.5 w-1.5 rounded-full ${item.scan_count >= item.max_scans ? 'bg-rose-300' : 'bg-emerald-300'}`}/>
-                          {item.scan_count >= item.max_scans ? 'Penuh' : 'Aktif'}
-                        </Badge>
-                      </td>
-                      <td className="px-5 py-4">
-                        <div className="flex justify-end gap-1">
-                          <button title="Pratinjau tiket" onClick={() => onPreview(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Eye size={14}/></button>
-                          <button title="Salin tautan" onClick={() => copy(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Copy size={14}/></button>
-                          <button title="Edit tiket" onClick={() => onEdit(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Pencil size={14}/></button>
-                          <button 
-                            title="Hapus tiket" 
-                            onClick={() => handleDelete(item.id)} 
-                            className="rounded-lg p-2 text-slate-600 hover:bg-rose-400/10 hover:text-rose-300"
-                          >
-                            <Trash2 size={14}/>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {rows.map(item => {
+                    const isDeclined = item.rsvp_status === 'declined';
+                    const isAttending = item.rsvp_status === 'attending';
+
+                    return (
+                      <tr key={item.id} className={`transition ${isDeclined ? 'bg-rose-950/10 opacity-50' : 'hover:bg-white/[.018]'}`}>
+                        <td className="px-5 py-4">
+                          <div className={`max-w-[180px] truncate text-[11px] font-medium ${isDeclined ? 'line-through text-rose-300' : 'text-slate-200'}`}>
+                            {getInvitee(item)}
+                          </div>
+                          <div className="mt-1 text-[9px] text-slate-500">
+                            {item.type === 'school' ? `${item.teacher_names?.length || 0} guru pendamping` : item.type === 'vip' ? 'Undangan individual' : 'Undangan keluarga'}
+                          </div>
+                        </td>
+
+                        <td className="px-4 py-4">
+                          <Badge tone={item.type === 'vip' ? 'gold' : 'neutral'}>{categoryLabel[item.type]}</Badge>
+                        </td>
+
+                        {/* Status RSVP */}
+                        <td className="px-4 py-4">
+                          {isAttending && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-semibold text-emerald-300">
+                              • Hadir
+                            </span>
+                          )}
+                          {isDeclined && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-rose-500/20 bg-rose-500/10 px-2 py-0.5 text-[9px] font-semibold text-rose-300">
+                              ✕ Absen
+                            </span>
+                          )}
+                          {!isAttending && !isDeclined && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-slate-500/20 bg-slate-500/10 px-2 py-0.5 text-[9px] font-semibold text-slate-400">
+                              ? Belum RSVP
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="px-4 py-4 font-mono text-[10px] text-slate-400">{item.ticket_code}</td>
+                        <td className="px-4 py-4 text-[10px] text-slate-300">{item.seat_area}</td>
+                        
+                        <td className="px-4 py-4">
+                          <div className="text-[10px] font-medium text-slate-200">{item.scan_count}<span className="text-slate-500">/{item.max_scans}</span></div>
+                          <div className="mt-1.5 h-1 w-16 overflow-hidden rounded-full bg-white/10">
+                            <div className={`h-full rounded-full ${item.scan_count >= item.max_scans ? 'bg-rose-400' : 'bg-[#C6A15B]'}`} style={{ width: `${Math.min(100, (item.scan_count / item.max_scans) * 100)}%` }}/>
+                          </div>
+                        </td>
+
+                        <td className="px-4 py-4">
+                          <Badge tone={item.scan_count >= item.max_scans ? 'red' : 'green'}>
+                            <span className={`h-1.5 w-1.5 rounded-full ${item.scan_count >= item.max_scans ? 'bg-rose-300' : 'bg-emerald-300'}`}/>
+                            {item.scan_count >= item.max_scans ? 'Penuh' : 'Aktif'}
+                          </Badge>
+                        </td>
+
+                        <td className="px-5 py-4">
+                          <div className="flex justify-end gap-1">
+                            <button title="Pratinjau tiket" onClick={() => onPreview(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Eye size={14}/></button>
+                            <button title="Salin tautan" onClick={() => copy(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Copy size={14}/></button>
+                            <button title="Edit tiket" onClick={() => onEdit(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Pencil size={14}/></button>
+                            <button 
+                              title="Hapus tiket" 
+                              onClick={() => handleDelete(item.id)} 
+                              className="rounded-lg p-2 text-slate-600 hover:bg-rose-400/10 hover:text-rose-300"
+                            >
+                              <Trash2 size={14}/>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
