@@ -137,6 +137,8 @@ export default function PublicTicketPage({ ticketCode }) {
             <div className="mt-1 text-[9px] text-slate-500">
               Tunjukkan barcode ini kepada petugas di pintu masuk
             </div>
+          </div>
+          <div className="flex items-center justify-between border-t border-dashed border-white/15 pt-4">
             <button 
               onClick={() => window.location.href = `/public/${ticketCode}`}
               className="mb-4 inline-flex items-center gap-2 text-xs text-slate-400 hover:text-[#C6A15B] transition"
@@ -144,7 +146,6 @@ export default function PublicTicketPage({ ticketCode }) {
               ← Kembali ke Beranda Informasi
             </button>
           </div>
-
           {/* Sisa Kuota Scan */}
           <div className="flex items-center justify-between border-t border-dashed border-white/15 pt-4">
             <div>
