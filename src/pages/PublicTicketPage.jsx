@@ -137,6 +137,12 @@ export default function PublicTicketPage({ ticketCode }) {
             <div className="mt-1 text-[9px] text-slate-500">
               Tunjukkan barcode ini kepada petugas di pintu masuk
             </div>
+            <button 
+              onClick={() => window.location.href = `/public/${ticketCode}`}
+              className="mb-4 inline-flex items-center gap-2 text-xs text-slate-400 hover:text-[#C6A15B] transition"
+            >
+              ← Kembali ke Beranda Informasi
+            </button>
           </div>
 
           {/* Sisa Kuota Scan */}

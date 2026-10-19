@@ -22,7 +22,7 @@ import { categoryLabel, getInvitee } from '../data'
 
 const inputClass = 'w-full rounded-xl border border-white/10 bg-[#0F171E] px-3.5 py-3 text-xs text-slate-100 outline-none transition placeholder:text-slate-600 focus:border-[#C6A15B]/60 focus:ring-2 focus:ring-[#C6A15B]/10'
 
-export default function InvitationsPage({ invitations, setInvitations, query, setQuery, onCreate, onEdit, onPreview, notify }) {
+export default function InvitationsPage({ invitations, setInvitations, query, setQuery, onCreate, onEdit, onPreview, notify, token }) {
   const [filter, setFilter] = useState('all')
   const [status, setStatus] = useState('all')
   const [page, setPage] = useState(1)
@@ -39,13 +39,42 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
 
   useEffect(() => setPage(1), [filter, status, query])
 
+  // 1. Disesuaikan agar menyalin tautan /public/KODE_TIKET (Halaman Home/Landing)
   const copy = async item => { 
     try { 
-      await navigator.clipboard.writeText(`${window.location.origin}/ticket/${item.ticket_code}`)
-      notify('Tautan tiket disalin.') 
+      const publicUrl = `${window.location.origin}/public/${item.ticket_code}`
+      await navigator.clipboard.writeText(publicUrl)
+      notify('Tautan undangan publik disalin.') 
     } catch { 
       notify('Browser tidak mengizinkan salin otomatis.') 
     } 
+  }
+
+  // 2. Fungsi Hapus yang tersambung langsung ke API Backend PostgreSQL
+  const handleDelete = async (id) => {
+    if (!window.confirm('Hapus tiket ini secara permanen dari database?')) return
+
+    try {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://golden-ticket-backend.wasmer.app/api'
+      const res = await fetch(`${API_BASE_URL}/invitations/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      const json = await res.json()
+      if (res.ok && json.success) {
+        setInvitations(prev => prev.filter(i => i.id !== id))
+        notify('Tiket berhasil dihapus dari database.')
+      } else {
+        notify(json.message || 'Gagal menghapus tiket dari server.')
+      }
+    } catch (err) {
+      console.error(err)
+      notify('Terjadi kesalahan koneksi ke server.')
+    }
   }
 
   return (
@@ -125,7 +154,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
                       <td className="px-5 py-4">
                         <div className="max-w-[180px] truncate text-[11px] font-medium text-slate-200">{getInvitee(item)}</div>
                         <div className="mt-1 text-[9px] text-slate-500">
-                          {item.type === 'school' ? `${item.teacher_names.length} guru pendamping` : item.type === 'vip' ? 'Undangan individual' : 'Undangan keluarga'}
+                          {item.type === 'school' ? `${item.teacher_names?.length || 0} guru pendamping` : item.type === 'vip' ? 'Undangan individual' : 'Undangan keluarga'}
                         </div>
                       </td>
                       <td className="px-4 py-4">
@@ -136,7 +165,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
                       <td className="px-4 py-4">
                         <div className="text-[10px] font-medium text-slate-200">{item.scan_count}<span className="text-slate-500">/{item.max_scans}</span></div>
                         <div className="mt-1.5 h-1 w-16 overflow-hidden rounded-full bg-white/10">
-                          <div className={`h-full rounded-full ${item.scan_count >= item.max_scans ? 'bg-rose-400' : 'bg-[#C6A15B]'}`} style={{ width: `${Math.min(100, item.scan_count / item.max_scans * 100)}%` }}/>
+                          <div className={`h-full rounded-full ${item.scan_count >= item.max_scans ? 'bg-rose-400' : 'bg-[#C6A15B]'}`} style={{ width: `${Math.min(100, (item.scan_count / item.max_scans) * 100)}%` }}/>
                         </div>
                       </td>
                       <td className="px-4 py-4">
@@ -149,15 +178,10 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
                         <div className="flex justify-end gap-1">
                           <button title="Pratinjau tiket" onClick={() => onPreview(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Eye size={14}/></button>
                           <button title="Salin tautan" onClick={() => copy(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Copy size={14}/></button>
-                          <button title="Edit demo" onClick={() => onEdit(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Pencil size={14}/></button>
+                          <button title="Edit tiket" onClick={() => onEdit(item)} className="rounded-lg p-2 text-slate-500 hover:bg-white/5 hover:text-[#C6A15B]"><Pencil size={14}/></button>
                           <button 
-                            title="Hapus demo" 
-                            onClick={() => {
-                              if (window.confirm('Hapus tiket ini dari data?')) {
-                                setInvitations(prev => prev.filter(i => i.id !== item.id))
-                                notify('Tiket dihapus dari data.')
-                              }
-                            }} 
+                            title="Hapus tiket" 
+                            onClick={() => handleDelete(item.id)} 
                             className="rounded-lg p-2 text-slate-600 hover:bg-rose-400/10 hover:text-rose-300"
                           >
                             <Trash2 size={14}/>
@@ -183,7 +207,7 @@ export default function InvitationsPage({ invitations, setInvitations, query, se
           </>
         )}
       </div>
-      <p className="mt-3 text-[10px] leading-5 text-slate-600">Mode preview: perubahan tersimpan di state browser dan akan hilang saat halaman dimuat ulang. Hubungkan service API untuk penyimpanan permanen.</p>
+      <p className="mt-3 text-[10px] leading-5 text-slate-600">Terhubung secara live dengan REST API Backend Laravel & PostgreSQL.</p>
     </div>
   )
 }

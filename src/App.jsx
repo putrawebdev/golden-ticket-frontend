@@ -17,13 +17,22 @@ import ScannerPage from './pages/ScannerPage'
 import AttendancePage from './pages/AttendancePage'
 import SettingsPage from './pages/SettingsPage'
 import PublicTicketPage from './pages/PublicTicketPage'
+// Import komponen PublicLandingPage yang akan kita buat
+import PublicLandingPage from './pages/PublicLandingPage'
 
 export default function App() {
   // Cek apakah halaman dibuka lewat path public /ticket/KODE_TIKET
   const path = window.location.pathname
-  if (path.startsWith('/ticket/')) {
-    const ticketCode = path.replace('/ticket/', '').trim()
+  // 1. Jalur Halaman Tiket (+ QR Code)
+  if (path.startsWith('/public/tickets/')) {
+    const ticketCode = path.replace('/public/tickets/', '').trim()
     return <PublicTicketPage ticketCode={ticketCode} />
+  }
+
+  // 2. Jalur Halaman Home / Landing Informasi Sekolah & Event
+  if (path.startsWith('/public/')) {
+    const ticketCode = path.replace('/public/', '').trim()
+    return <PublicLandingPage ticketCode={ticketCode} />
   }
 
   // 1. KUMPULAN SEMUA STATE (Wajib di Paling Atas)
