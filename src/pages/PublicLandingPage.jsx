@@ -102,7 +102,8 @@ export default function PublicLandingPage({ ticketCode }) {
     )
   }
 
-  const { event, rsvp_status } = data
+  const { event } = data
+  const rsvp_status = data.rsvp_status || 'pending'
   const guestName = data.guest_name || data.school_name || 'Tamu Undangan Terhormat'
 
   return (
