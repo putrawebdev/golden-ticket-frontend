@@ -138,7 +138,7 @@ export default function PublicTicketPage({ ticketCode }) {
               Tunjukkan barcode ini kepada petugas di pintu masuk
             </div>
           </div>
-          <div className="flex items-center justify-between border-t border-dashed border-white/15 pt-4">
+          <div className="flex items-center justify-center border-t border-dashed border-white/15 pt-4">
             <button 
               onClick={() => window.location.href = `/public/${ticketCode}`}
               className="mb-4 inline-flex items-center gap-2 text-xs text-slate-400 hover:text-[#C6A15B] transition"
